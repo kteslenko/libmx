@@ -14,11 +14,11 @@ void *mx_memmem(const void *big, size_t big_len, const void *little, size_t litt
         if (remaining < little_len) {
             break;
         }
-        if (mx_memcmp(ptr, little, little_len)) {
+        if (mx_memcmp(ptr, little, little_len) == 0) {
             return ptr;
         }
 
-        ptr = mx_memchr(big, *(unsigned char*)little, big_len);
+        ptr = mx_memchr((unsigned char*)ptr + 1, *(unsigned char*)little, big_len);
     }
 
     return NULL;

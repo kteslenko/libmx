@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <malloc/malloc.h>
 
 typedef struct s_list {
     void *data;
