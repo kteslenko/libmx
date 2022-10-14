@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -24,6 +25,7 @@ void mx_foreach(int *arr, int size, void (*f)(int));
 int mx_binary_search(char **arr, int size, const char *s, int *count);
 int mx_bubble_sort(char **arr, int size);
 int mx_quicksort(char **arr, int left, int right);
+bool mx_isspace(char c);
 
 int mx_strlen(const char *s);
 void mx_swap_char(char *s1, char *s2);
@@ -36,7 +38,9 @@ char *mx_strndup(const char *s1, size_t n);
 char *mx_strcpy(char *dst, const char *src);
 char *mx_strncpy(char *dst, const char *src, int len);
 int mx_strcmp(const char *s1, const char *s2);
+int mx_strncmp(const char *s1, const char *s2, int n);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
+char *mx_strchr(const char *s, int c);
 char *mx_strstr(const char *haystack, const char *needle);
 int mx_get_substr_index(const char *str, const char *sub);
 int mx_count_substr(const char *str, const char *sub);
