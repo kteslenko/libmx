@@ -1,42 +1,54 @@
 #include "libmx.h"
 
+static char* split_on(char *str, char delim, char **remainder) {
+    char *end = mx_strchr(str, delim);
+
+    if (end != NULL) {
+        *end = '\0';
+        *remainder = mx_strdup(end + 1);
+    }
+    else {
+        *remainder = NULL;
+    }
+
+    return str;
+}
+
 int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd) {
     static char *remainder = NULL;
     char *str = NULL;
     int total = 0;
-    char *buf = malloc(buf_size + 1);
+    char *buf = mx_strnew(buf_size);
     ssize_t result = -1;
 
     if (remainder != NULL) {
-        str = remainder;
-        remainder = NULL;
+        str = split_on(remainder, delim, &remainder);
         total = mx_strlen(str);
+        str = mx_realloc(str, total + 1);
+        if (remainder != NULL) {
+            if (mx_strlen(remainder) == 0) {
+                mx_strdel(&remainder);
+            }
+            *lineptr = str;
+            return total;
+        }
     }
 
-    while (fd >= 0 && (result = read(fd, buf, buf_size)) > 0) {
-        char *ptr = mx_memchr(buf, delim, result);
-        ssize_t count = result;
-
-        if (ptr != NULL) {
-            count = ptr - buf;
-        }
-
-        buf[count] = '\0';
-        str = mx_realloc(str, total + count + 1);
+    while ((result = read(fd, buf, buf_size)) > 0) {
+        buf[result] = '\0';
+        split_on(buf, delim, &remainder);
+        total += mx_strlen(buf);
+        str = mx_realloc(str, total + 1);
         mx_strcat(str, buf);
-        total += count;
-
-        if (ptr != NULL) {
-            ssize_t remaining = result - count;
-
-            if (remaining > 0) {
-                remainder = mx_strndup(buf + count + 1, remaining);
+        if (remainder != NULL) {
+            if (mx_strlen(remainder) == 0) {
+                mx_strdel(&remainder);
             }
             break;
         }
     }
 
-    free(buf);
+    mx_strdel(&buf);
 
     if (result == -1) {
         mx_strdel(&str);
