@@ -9,9 +9,10 @@ void mx_pop_back(t_list **list) {
 
     current = *list;
 
-    if ((*list)->next == NULL) {
-        free(*list);
+    if (current->next == NULL) {
+        free(current);
         *list = NULL;
+        return;
     }
     
     while (current->next->next != NULL) {
