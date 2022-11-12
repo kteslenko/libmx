@@ -1,7 +1,7 @@
 #include "libmx.h"
 
 char *mx_file_to_str(const char *filename) {
-    char *str = mx_strnew(0);
+    char *str = NULL;
     char *buf = mx_strnew(128);
     int file = open(filename, O_RDONLY);
     ssize_t result = -1;

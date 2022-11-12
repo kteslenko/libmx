@@ -9,7 +9,7 @@ static int byte_len(wchar_t c) {
         }
     }
 
-    return -1;
+    return 4;
 }
 
 void mx_print_unicode(wchar_t c) {
