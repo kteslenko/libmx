@@ -2,10 +2,11 @@
 
 char *mx_file_to_str(const char *filename) {
     char *str = NULL;
-    char *buf = mx_strnew(128);
+    char buf[129];
     int file = open(filename, O_RDONLY);
     ssize_t result = -1;
 
+    buf[128] = '\0';
     if (file != -1) {
         while ((result = read(file, buf, 128)) > 0) {
             char *temp = str;
@@ -16,8 +17,6 @@ char *mx_file_to_str(const char *filename) {
         }
         close(file);
     }
-
-    mx_strdel(&buf);
     
     if (result == -1) {
         mx_strdel(&str);
