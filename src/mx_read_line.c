@@ -58,7 +58,7 @@ int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd) {
 
     mx_strdel(&buf);
 
-    if (result == -1) {
+    if (result == -1 || buf_size == 0) {
         mx_strdel(&str);
         mx_strdel(&remainder);
         return -2;
